@@ -1,0 +1,6 @@
+with open(D:\"03 - Python programs"\"00 - Tests"\"01 - Open files"\texto1,"r") as file1:
+	FileContent = file1.read()
+	print(FileContent)
+
+print(FileContent)
+file1.closed

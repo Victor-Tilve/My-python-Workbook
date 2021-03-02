@@ -1,0 +1,1 @@
+One way to read or write a file in Python is to use the built-in open function. The open function provides a File object that contains the methods and attributes you need in order to read, save, and manipulate the file. In this notebook, we will only cover .txt files. The first parameter you need is the file path and the file name. An example is shown as follow:
