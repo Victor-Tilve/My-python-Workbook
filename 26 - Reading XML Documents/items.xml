@@ -1,0 +1,10 @@
+<data>
+    <items>
+        <item name="item1">item1abc</item>
+        <item name="item2">item2abc</item>
+    </items>
+    <pruebas>
+        <prueb name = "mundo">Hola, Mundo </prueb>
+        <prueb name = "universo">Hola, universo </prueb>
+    </pruebas>
+</data>
