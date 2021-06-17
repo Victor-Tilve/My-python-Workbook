@@ -1,0 +1,5 @@
+1. Se debe desarrollar una interfaz y un procesamiento
+2. Que el programa pueda seleccionar los puertos COM
+3. QUe se puedan programar qué parámetros se van a enviar y cada cuanto tiempo
+4. Se almacenará el comando enviado, la respuesta recibida y el momento en el que se recibió
+5. Se le asignará nombre al documento con "AAAAMMDDHHMM"
