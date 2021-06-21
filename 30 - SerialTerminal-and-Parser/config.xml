@@ -1,0 +1,12 @@
+<data>
+    <modem_9600>
+        <item name="Port">COM11</item>
+        <item name="baudrate">9600</item>
+        <item name="bitesize">8</item>
+        <item name="parity">N</item>
+        <item name="stopbits">1</item>
+        <item name="timeout">None</item>
+        <item name="xonxoff">0</item>
+        <item name="rtscts">0</item>
+    </modem_9600>
+</data>
