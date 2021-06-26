@@ -29,5 +29,6 @@ class PrintLines(LineReader):
 
 ser = serial.serial_for_url('loop://', baudrate=9600, timeout=1)
 with ReaderThread(ser, PrintLines) as protocol:
-    protocol.write_line('hello')
+    protocol.write_line('Hola')
     time.sleep(2)
+    # protocol.write_line('hello')
