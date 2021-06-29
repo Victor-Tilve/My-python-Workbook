@@ -1,0 +1,133 @@
+import tkinter as tk
+from tkinter import ttk
+
+import serial
+
+class Widgets(tk.Frame): #TODO: add the parameter of the frame
+    def __init__(self, window):
+        tk.Frame.__init__(self, window)
+        self.window = window
+
+        self.initUI()
+
+    def initUI(self):
+        
+        #Frame for parameter
+        self.labelframe_parameters=ttk.LabelFrame(self.window, text="Parameters:")
+        self.labelframe_parameters.grid(column = 0,row = 1, padx = 5, pady = 10, sticky="nw")
+
+        #Frame for MainMenu
+        self.labelframe_mainMenu=ttk.LabelFrame(self.window, text="Main Menu:")
+        self.labelframe_mainMenu.grid(column = 0,row = 2, padx = 5, pady = 10,sticky="nw")
+        self.labelframe_commands=ttk.Frame(self.labelframe_mainMenu)
+        self.labelframe_commands.grid(column = 1,row = 0, padx = 8, pady = 5,sticky="w")
+
+        #Frame for Receive
+        self.labelframe_received=ttk.LabelFrame(self.window, text="Received:")
+        self.labelframe_received.grid(column = 1,row = 2, padx = 5, pady = 10, sticky="nw")
+
+        #Frame for Sent
+        self.labelframe_sent=ttk.LabelFrame(self.window, text="Sent:")
+        self.labelframe_sent.grid(column = 1,row = 1, padx = 5, pady = 10, sticky="nw")
+
+
+        # Lots of other different tkinter widgets go here
+
+        #### Widgest for Parameters #####
+        self.parameters()
+
+        #### Widgest for Sent #####
+        self.sent()
+
+        
+
+        # self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect", command=self.portHandler(sentText))
+        # self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect")
+        # self.btn_connect.grid(column=0, row=2,columnspan=2, padx=4, pady=4)
+
+    def parameters(self):
+        # label labelframe_parameters
+        ttk.Label(self.labelframe_parameters, text = "Port :",
+                font = ("Times New Roman", 10)).grid(column = 0,
+                row = 0, padx = 4, pady = 4, sticky="w")
+        ttk.Label(self.labelframe_parameters, text = "Baud :",
+                font = ("Times New Roman", 10)).grid(column = 0,
+                row = 1, padx = 4, pady = 4, sticky="w")
+        
+        #  labelframe_parameters Combobox creation
+        self.n_port             = tk.StringVar()
+        self.n_baud             = tk.StringVar()
+        
+        #Comboboxes
+        self.monthchoosen_port  = ttk.Combobox(self.labelframe_parameters, width = 20, textvariable = self.n_port)
+        self.monthchoosen_baud  = ttk.Combobox(self.labelframe_parameters, width = 20, textvariable = self.n_baud)
+
+        # labelframe_parameters Adding comboboxs drop down lists
+        #TODO: list available ports and store it in a list
+        self.monthchoosen_port['values'] = (' COM1', 
+                                ' COM2',
+                                ' COM3',
+                                ' COM4',
+                                ' COM5',
+                                ' COM6',
+                                ' COM7',
+                                ' COM11')
+        self.monthchoosen_baud['values'] = (' 600', 
+                                ' 1200',
+                                ' 2400',
+                                ' 4800',
+                                ' 9600',
+                                ' 14400',
+                                ' 19200',
+                                ' 38400',
+                                ' 56000',
+                                ' 57600',
+                                ' 115200')
+
+        #Position
+        self.monthchoosen_port.grid(column = 1, row = 0)
+        self.monthchoosen_baud.grid(column = 1, row = 1)
+        #TODO: Label have to change when connect is already clicked
+
+        #Configuring the port
+        self.parameters_set_SerialPort()
+
+        # self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect", command=self.portHandler(sentText))
+        self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect")
+        self.btn_connect.grid(column=0, row=2,columnspan=2, padx=4, pady=4)
+
+
+        self.btn_connect.bind('<Button-1>',self.parameters_set_portHandler) #TODO: how to use this without run it straightway
+
+    def parameters_set_SerialPort(self) -> None:
+        self.ser        = serial.Serial(
+                port='COM11',
+                baudrate=9600,
+                parity          = serial.PARITY_NONE,
+                stopbits        = serial.STOPBITS_ONE,
+                bytesize        = serial.EIGHTBITS)
+
+        self.ser.timeout = 5
+        self.ser.close()
+        #TODO: handle the raises
+        #TODO:Implement loop or thread
+
+    def parameters_set_portHandler(self) -> None:
+                print('Inside Parameters\'s interactive method')
+                if self.ser.isOpen():
+                        self.ser.close()
+                        self.sent_printMessage('\r\nPort closed')
+                else:
+                        self.ser.open()
+                        self.ser.write("Port opened\r\n".encode())
+                        self.sent_printMessage('\r\nPort opened')
+
+    def sent(self):    
+        self.labelframe_sent=ttk.LabelFrame(self.window, text="Sent:")
+        self.labelframe_sent.grid(column = 1,row = 1, padx = 5, pady = 10, sticky="nw")
+        
+        self.text = tk.Text(self.labelframe_sent,height=10,width=50)
+        self.text.grid(padx=4, pady=4)
+        
+    def sent_printMessage(self,message:'str') -> None:
+        self.text.insert(tk.END,message)

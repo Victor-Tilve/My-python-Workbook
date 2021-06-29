@@ -34,13 +34,13 @@ ttk.Label(fr_title, text = "Módem Acústico AMT-915",
 
 sent        = Sent(window)
 mainMenu    = MainMenu(window,sent) #TODO: start just works when contect is active. Main Menu has a method to write in the port in the time setted.
-parameter   = Parameter(window) #TODO: Inlcude sent in the parameters
+parameter   = Parameter(window, sent) #TODO: Inlcude sent in the parameters
 received    = Received(window)
 #RTODO: take the information that came from the listener and print it
 
 
 
-sent.text.insert(tk.END, "\nPut me on a new line!")
+# sent.text.insert(tk.END, "\nPut me on a new line!")
 
 
 window.mainloop()

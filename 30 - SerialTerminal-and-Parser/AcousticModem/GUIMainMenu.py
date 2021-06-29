@@ -64,6 +64,7 @@ class MainMenu:
             self.btn_start.grid(column=0, row=3,columnspan=2, padx=4, pady=4)
 
     def interactive(self,sentText:'Sent') -> None:
+                print('Inside mainMenu\'s interactive method')
                 command_value1 = self.ent_commands1.get()
                 command_value2 = self.ent_commands2.get()
                 command_value3 = self.ent_commands3.get()
@@ -71,18 +72,18 @@ class MainMenu:
                 period_value = self.monthchoosen_period.get()
                 times_value = self.monthchoosen_times.get()
 
-                for i in range(3): #TODO: Use times_value
-                        sentText.printMessage(command_value1)
-                        time.sleep(.100)
+                # for i in range(3): #TODO: Use times_value
+                #         sentText.printMessage(command_value1)
+                #         time.sleep(.100)
                         
-                        sentText.printMessage(command_value1)
-                        time.sleep(.100)
+                #         sentText.printMessage(command_value1)
+                #         time.sleep(.100)
                         
-                        sentText.printMessage(command_value1)
-                        time.sleep(.100)
+                #         sentText.printMessage(command_value1)
+                #         time.sleep(.100)
                         
 
-                        time.sleep(5) #TODO: Make the convertion of the time, use period_value
+                #         time.sleep(5) #TODO: Make the convertion of the time, use period_value
 
 
 
