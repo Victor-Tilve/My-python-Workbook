@@ -3,12 +3,13 @@ from tkinter import ttk
 
 #TODO: delete this module
 from tkinter import messagebox
+from typing import Text
 
 import serial
-
+from GUISent import *
 
 class Parameter:
-        def __init__(self,window:'tk.Tk()') -> None:
+        def __init__(self,window:'tk.Tk()',sentText:'Sent') -> None:
                 self.state = True
                 
                 self.labelframe_parameters=ttk.LabelFrame(window, text="Parameters:")
@@ -52,38 +53,68 @@ class Parameter:
                 self.monthchoosen_port.grid(column = 1, row = 0)
                 self.monthchoosen_baud.grid(column = 1, row = 1)
                 #TODO: Label have to change when connect is already clicked
-                self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect",command=self.interactive)
+                
+                #Configuring the port
+                self.set_port()
+
+                self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect", command=self.portHandler(sentText))
                 self.btn_connect.grid(column=0, row=2,columnspan=2, padx=4, pady=4)
 
-       
-        def interactive(self) -> None:
-                if self.state:
-                        # port_value = self.monthchoosen_port.get()
-                        # baud_value = int(self.monthchoosen_baud.get())
-                               
-                        self.ser        = serial.Serial(
+
+                # self.btn_connect.bind('button-1',self.portHandler(sentText))
+
+        def set_port(self) -> None:
+                self.ser        = serial.Serial(
                         port='COM11',
                         baudrate=9600,
                         parity          = serial.PARITY_NONE,
                         stopbits        = serial.STOPBITS_ONE,
                         bytesize        = serial.EIGHTBITS)
 
-                        self.ser.timeout = 5
-                        self.state = not self.state 
+                self.ser.timeout = 5
+       
+        def portHandler(self, sentText:'Sent') -> None:
+                        print('Inside the portHandler')
+                        if self.ser.close():
+                                self.ser.open()
+                                sentText.printMessage('\r\nPort opened')
+                        elif self.ser.open():
+                                self.ser.close()
+                                sentText.printMessage('\r\nPort closed')
                         
-                        while True: #TODO: Como meto aquí el ciclo while para que
-                                buffer = ""
-                                print("send another massege\n")
-                                while True:
-                                        oneByte = self.ser.read(1)
-                                        if oneByte == b"\r":    #method should returns bytes
-                                                print (buffer)
-                                                self.ser.write("Received\r\n".encode())
-                                                break
-                                        else:
-                                                buffer += oneByte.decode()
-                                
-                else: 
-                        self.ser.close() #TODO: check the port clousure
-                        self.state = not self.state
+
+
+
+
+                # if self.state:
+                #         # port_value = self.monthchoosen_port.get()
+                #         # baud_value = int(self.monthchoosen_baud.get())
+
+                #         # self.btn_connect(text) #TODO: change the text when the button is click
+
+                #         self.ser        = serial.Serial(
+                #         port='COM11',
+                #         baudrate=9600,
+                #         parity          = serial.PARITY_NONE,
+                #         stopbits        = serial.STOPBITS_ONE,
+                #         bytesize        = serial.EIGHTBITS)
+
+                #         self.ser.timeout = 5
+                         
+
+                #         # while True: #TODO: Como meto aquí el ciclo while para que
+                #         #         buffer = ""
+                #         #         print("send another massege\n")
+                #         #         while True:
+                #         #                 oneByte = self.ser.read(1)
+                #         #                 if oneByte == b"\r":    #method should returns bytes
+                #         #                         print (buffer)
+                #         #                         self.ser.write("Received\r\n".encode())
+                #         #                         break
+                #         #                 else:
+                #         #                         buffer += oneByte.decode()
+                #         self.state = not self.state        
+                # else: 
+                #         self.ser.close() #TODO: check the port clousure
+                #         self.state = not self.state
 
