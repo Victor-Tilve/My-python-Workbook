@@ -1,84 +1,89 @@
 import tkinter as tk    # TODO: Borrar estos import despues de terminar con este modulo, solo dejar los de el GUI principal
 from tkinter import ttk
 
+#TODO: delete this module
+from tkinter import messagebox
 
-def parameter(window):
-      
-    labelframe_parameters=ttk.LabelFrame(window, text="Parameters:")
-    labelframe_parameters.grid(column = 0,row = 2, padx = 5, pady = 10, sticky="nw")
-
-    # label1=ttk.Label(labelframe_parameters, text=" Port:")
-    # label1.grid(column=0, row=0, padx=4, pady=4, sticky="nw")  
-
-    # label labelframe_parameters
-    ttk.Label(labelframe_parameters, text = "Port :",
-            font = ("Times New Roman", 10)).grid(column = 0,
-            row = 0, padx = 4, pady = 4, sticky="w")
-    ttk.Label(labelframe_parameters, text = "Baud :",
-            font = ("Times New Roman", 10)).grid(column = 0,
-            row = 1, padx = 4, pady = 4, sticky="w")
-    ttk.Label(labelframe_parameters, text = "Data size :",
-            font = ("Times New Roman", 10)).grid(column = 0,
-            row = 2, padx = 4, pady = 4, sticky="w")
-    ttk.Label(labelframe_parameters, text = "Parity :",
-            font = ("Times New Roman", 10)).grid(column = 0,
-            row = 3, padx = 4, pady = 4, sticky="w")
-    ttk.Label(labelframe_parameters, text = "Handshake :",
-            font = ("Times New Roman", 10)).grid(column = 0,
-            row = 4, padx = 4, pady = 4, sticky="w")
-
-    #  labelframe_parameters Combobox creation
-    n_port = tk.StringVar()
-    n_baud = tk.StringVar()
-    n_dataZise = tk.StringVar()
-    n_parity = tk.StringVar()
-    n_handshake = tk.StringVar()
-    
-    monthchoosen_port       = ttk.Combobox(labelframe_parameters, width = 20, textvariable = n_port)
-    monthchoosen_baud       = ttk.Combobox(labelframe_parameters, width = 20, textvariable = n_baud)
-    monthchoosen_dataZise   = ttk.Combobox(labelframe_parameters, width = 20, textvariable = n_dataZise)
-    monthchoosen_parity     = ttk.Combobox(labelframe_parameters, width = 20, textvariable = n_parity)
-    monthchoosen_handshake  = ttk.Combobox(labelframe_parameters, width = 20, textvariable = n_handshake)
-    
-    # labelframe_parameters Adding comboboxs drop down lists
-    monthchoosen_port['values'] = (' COM1', 
-                            ' COM2',
-                            ' COM3',
-                            ' COM4',
-                            ' COM5',
-                            ' COM6',
-                            ' COM7',
-                            ' COM8')
-    monthchoosen_baud['values'] = (' 600', 
-                            ' 1200',
-                            ' 2400',
-                            ' 4800',
-                            ' 9600',
-                            ' 14400',
-                            ' 19200',
-                            ' 38400',
-                            ' 56000',
-                            ' 57600',
-                            ' 115200')
-    monthchoosen_dataZise['values'] = (' 7',' 8')
-    monthchoosen_parity['values'] = (' OFF', 
-                            ' RTS/CTS',
-                            ' Xon/Xoff')
-    monthchoosen_handshake['values'] = (' Free', 
-                            ' PortStore test',
-                            ' Data',
-                            ' Setup')                                                                
+import serial
 
 
-    monthchoosen_port.grid(column = 1, row = 0)
-    monthchoosen_baud.grid(column = 1, row = 1)
-    monthchoosen_dataZise.grid(column = 1, row = 2)
-    monthchoosen_parity.grid(column = 1, row = 3)
-    monthchoosen_handshake.grid(column = 1, row = 4)
-    # monthchoosen_baud.current()
-    # monthchoosen_port.current()
-    # monthchoosen_dataZise.current()
-    # monthchoosen_parity.current()
-    # monthchoosen_handshake.current()
+class Parameter:
+        def __init__(self,window:'tk.Tk()') -> None:
+                self.state = True
+                
+                self.labelframe_parameters=ttk.LabelFrame(window, text="Parameters:")
+                self.labelframe_parameters.grid(column = 0,row = 1, padx = 5, pady = 10, sticky="nw")
 
-    # labelframe_parameters.grid(row=0, column=0, sticky="ns")
+                # label labelframe_parameters
+                ttk.Label(self.labelframe_parameters, text = "Port :",
+                        font = ("Times New Roman", 10)).grid(column = 0,
+                        row = 0, padx = 4, pady = 4, sticky="w")
+                ttk.Label(self.labelframe_parameters, text = "Baud :",
+                        font = ("Times New Roman", 10)).grid(column = 0,
+                        row = 1, padx = 4, pady = 4, sticky="w")
+               #  labelframe_parameters Combobox creation
+                self.n_port             = tk.StringVar()
+                self.n_baud             = tk.StringVar()
+                self.monthchoosen_port  = ttk.Combobox(self.labelframe_parameters, width = 20, textvariable = self.n_port)
+                self.monthchoosen_baud  = ttk.Combobox(self.labelframe_parameters, width = 20, textvariable = self.n_baud)
+
+                # labelframe_parameters Adding comboboxs drop down lists
+                #TODO: list available ports and store it in a list
+                self.monthchoosen_port['values'] = (' COM1', 
+                                        ' COM2',
+                                        ' COM3',
+                                        ' COM4',
+                                        ' COM5',
+                                        ' COM6',
+                                        ' COM7',
+                                        ' COM11')
+                self.monthchoosen_baud['values'] = (' 600', 
+                                        ' 1200',
+                                        ' 2400',
+                                        ' 4800',
+                                        ' 9600',
+                                        ' 14400',
+                                        ' 19200',
+                                        ' 38400',
+                                        ' 56000',
+                                        ' 57600',
+                                        ' 115200')
+
+                self.monthchoosen_port.grid(column = 1, row = 0)
+                self.monthchoosen_baud.grid(column = 1, row = 1)
+                #TODO: Label have to change when connect is already clicked
+                self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect",command=self.interactive)
+                self.btn_connect.grid(column=0, row=2,columnspan=2, padx=4, pady=4)
+
+       
+        def interactive(self) -> None:
+                if self.state:
+                        # port_value = self.monthchoosen_port.get()
+                        # baud_value = int(self.monthchoosen_baud.get())
+                               
+                        self.ser        = serial.Serial(
+                        port='COM11',
+                        baudrate=9600,
+                        parity          = serial.PARITY_NONE,
+                        stopbits        = serial.STOPBITS_ONE,
+                        bytesize        = serial.EIGHTBITS)
+
+                        self.ser.timeout = 5
+                        self.state = not self.state 
+                        
+                        while True: #TODO: Como meto aquí el ciclo while para que
+                                buffer = ""
+                                print("send another massege\n")
+                                while True:
+                                        oneByte = self.ser.read(1)
+                                        if oneByte == b"\r":    #method should returns bytes
+                                                print (buffer)
+                                                self.ser.write("Received\r\n".encode())
+                                                break
+                                        else:
+                                                buffer += oneByte.decode()
+                                
+                else: 
+                        self.ser.close() #TODO: check the port clousure
+                        self.state = not self.state
+
