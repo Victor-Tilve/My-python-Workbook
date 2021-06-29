@@ -40,7 +40,7 @@ received    = Received(window)
 
 
 
-sent.text.insert(tk.END, "\nPut me on a new line!")
+# sent.text.insert(tk.END, "\nPut me on a new line!")
 
 
 window.mainloop()

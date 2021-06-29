@@ -5,6 +5,8 @@ from tkinter import ttk
 from tkinter import messagebox
 from typing import Text
 
+# "python.analysis.extraPaths": ["./path-to-code/"]
+
 import serial
 from GUISent import *
 
@@ -57,11 +59,12 @@ class Parameter:
                 #Configuring the port
                 self.set_port()
 
-                self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect", command=self.portHandler(sentText))
+                # self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect", command=self.portHandler(sentText))
+                self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect")
                 self.btn_connect.grid(column=0, row=2,columnspan=2, padx=4, pady=4)
 
 
-                # self.btn_connect.bind('button-1',self.portHandler(sentText))
+                self.btn_connect.bind('<Button-3>',self.portHandler(sentText)) #TODO: how to use this without run it straightway
 
         def set_port(self) -> None:
                 self.ser        = serial.Serial(
@@ -72,15 +75,18 @@ class Parameter:
                         bytesize        = serial.EIGHTBITS)
 
                 self.ser.timeout = 5
+                self.ser.close()
+                #TODO: handle the raises
        
         def portHandler(self, sentText:'Sent') -> None:
-                        print('Inside the portHandler')
-                        if self.ser.close():
-                                self.ser.open()
-                                sentText.printMessage('\r\nPort opened')
-                        elif self.ser.open():
+                        print('Inside Parameters\'s interactive method')
+                        if self.ser.isOpen():
                                 self.ser.close()
                                 sentText.printMessage('\r\nPort closed')
+                        else:
+                                self.ser.open()
+                                self.ser.write("Port opened\r\n".encode())
+                                sentText.printMessage('\r\nPort opened')
                         
 
 
