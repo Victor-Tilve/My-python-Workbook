@@ -1,3 +1,4 @@
+from serialPort import SerialPort
 import tkinter as tk
 from tkinter import ttk
 from widgets import Widgets
@@ -12,9 +13,6 @@ class App(tk.Frame):
 
         self.initUI()
 
-    def get_details(self):
-
-        self.widgets.button.config(text='goodbye')
 
     #Init user interface
     def initUI(self):
@@ -36,3 +34,6 @@ class App(tk.Frame):
         fr_title.grid(column = 0,row = 0,columnspan = 2,padx = 5, pady = 5, sticky="nsew")
         
         self.widgets = Widgets(window=self.window)
+        self.serial = SerialPort()
+        #TODO: implement the thread rh
+
