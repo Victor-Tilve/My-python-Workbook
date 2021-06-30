@@ -122,22 +122,27 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
     #     #TODO:Implement loop or thread
 
     def parameters_portHandler(self) -> None:
-        print('Inside Parameters\'s interactive method')
-        try:
-            # self.ser.set_port('COM11')
-            self.ser.open()
-            # self.ser.write("Port opened\r\n".encode())
-            self.ser.read_serial(self.textReceived)
-            self.sent_printMessage('Port opened\r\n')
-            # self.btn_connect.config(text="Disconnect") #TODO: Change the text
+        print('<widgets><func: parameters_portHandler()>:Inside Parameters\'s interactive method')
+        # try:
+        #     # self.ser.set_port('COM11')
+        #     # self.ser.open()
+        #     # self.ser.write("Port opened\r\n".encode())
+        #     # self.ser.read_serial(self.textReceived)
+        #     self.ser.set_thread()
+        #     self.sent_printMessage('Port opened\r\n')
+        #     # self.btn_connect.config(text="Disconnect") #TODO: Change the text
 
-        except Exception as e:
-            print("<widgets><func: parameters_portHandler()>:error open serial port: " + str(e))
+        # except Exception as e:
+        #     print("<widgets><func: parameters_portHandler()>:error open serial port: " + str(e))
             
         if self.ser.isOpen():
             # self.ser.write("Port closed\r\n".encode())
             self.ser.close()
             self.sent_printMessage('Port closed\r\n')
+        else:
+            self.ser.read_serial(self.textReceived)
+            self.sent_printMessage('Port opened\r\n')
+
      
     def sent(self):    
         self.labelframe_sent=ttk.LabelFrame(self.window, text="Sent:")

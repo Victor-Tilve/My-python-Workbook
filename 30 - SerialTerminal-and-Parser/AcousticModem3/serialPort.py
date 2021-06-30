@@ -36,7 +36,8 @@ class SerialPort():
     except Exception as e:
       print("<serialPort><func: open()>:error open serial port: " + str(e))
 
-  def read_serial(self,textReceived:'tk.Text()'):
+  # def read_serial(self,textReceived:'tk.Text()'):
+  def read_serial(self):
     try:
       self.ser.open()
     except Exception as e:
@@ -44,13 +45,14 @@ class SerialPort():
       exit()
 
     if self.ser.isOpen():
+      print("<serialPort><func: read_serial()>:Checking if port is opened")
       try:
           while True:
               c = self.ser.read(size=1024)
               with self.lock:
                 if len(c) > 0:
-                  textReceived.insert(tk.END,c)
-                  # sys.stdout.buffer.write(c) #TODO: implement Received
+                  # textReceived.insert(tk.END,c)
+                  sys.stdout.buffer.write(c) #TODO: implement Received
 
 
           self.ser.close()
@@ -62,18 +64,31 @@ class SerialPort():
       print("<serialPort><func: read_serial()>:cannot open serial port ")
       exit()
 
-  def set_thread(self):
+  def set_thread(self,textReceived:'tk.Text()'):#FIXME: No está funcionando
     # Create two threads as follows
+    # self.textReceived = textReceived
     print("Inside Thread")
     try:
-      t = threading.Thread(target=self.read_serial, args=[self.ser])
+      t = threading.Thread(target=self.read_serial(textReceived), args=[self.ser])
       t.daemon = True  # thread dies when main thread (only non-daemon thread) exits.
       t.start()
 
     except:
       print("<serialPort><func: set_thread()>:Error: unable to start thread")    
 
+  def isOpen(self):
+    if self.ser.isOpen():
+      return True
+    else:
+      return False
+  
+  def close(self):
+    self.ser.close()
 
+
+if __name__ == '__main__':
+  serial = SerialPort('COM11',9600)
+  serial.read_serial()
 
 
 
