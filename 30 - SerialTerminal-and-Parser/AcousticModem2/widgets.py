@@ -7,7 +7,7 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
     def __init__(self, window):
         tk.Frame.__init__(self, window)
         self.window = window
-
+# prueba
         self.initUI()
 
     def initUI(self):
