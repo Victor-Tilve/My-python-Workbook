@@ -68,34 +68,36 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
         #  labelframe_parameters Combobox creation
         self.n_port             = tk.StringVar()
         self.n_baud             = tk.StringVar()
+
+        #Entries
+        # self.monthchoosen_port  = ttk.Entry(self.labelframe_parameters,width=10) 
+        # self.monthchoosen_baud  = ttk.Entry(self.labelframe_parameters,width=10) 
         
         #Comboboxes
-        # self.monthchoosen_port  = ttk.Combobox(self.labelframe_parameters, width = 20, textvariable = self.n_port)
-        # self.monthchoosen_baud  = ttk.Combobox(self.labelframe_parameters, width = 20, textvariable = self.n_baud)
-        self.monthchoosen_port  = ttk.Entry(self.labelframe_parameters,width=10) 
-        self.monthchoosen_baud  = ttk.Entry(self.labelframe_parameters,width=10) 
+        self.monthchoosen_port  = ttk.Combobox(self.labelframe_parameters, width = 20, textvariable = self.n_port)
+        self.monthchoosen_baud  = ttk.Combobox(self.labelframe_parameters, width = 20, textvariable = self.n_baud)
 
         # labelframe_parameters Adding comboboxs drop down lists
-        #TODO: list available ports and store it in a list
-        # self.monthchoosen_port['values'] = (' COM1', 
-        #                         ' COM2',
-        #                         ' COM3',
-        #                         ' COM4',
-        #                         ' COM5',
-        #                         ' COM6',
-        #                         ' COM7',
-        #                         ' COM11')
-        # self.monthchoosen_baud['values'] = (' 600', 
-        #                         ' 1200',
-        #                         ' 2400',
-        #                         ' 4800',
-        #                         ' 9600',
-        #                         ' 14400',
-        #                         ' 19200',
-        #                         ' 38400',
-        #                         ' 56000',
-        #                         ' 57600',
-        #                         ' 115200')
+        # TODO: list available ports and store it in a list
+        self.monthchoosen_port['values'] = ('COM1', 
+                                'COM2',
+                                'COM3',
+                                'COM4',
+                                'COM5',
+                                'COM6',
+                                'COM7',
+                                'COM11')
+        self.monthchoosen_baud['values'] = ('600', 
+                                '1200',
+                                '2400',
+                                '4800',
+                                '9600',
+                                '14400',
+                                '19200',
+                                '38400',
+                                '56000',
+                                '57600',
+                                '115200')
 
         #Position
         self.monthchoosen_port.grid(column = 1, row = 0)
@@ -111,8 +113,8 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
         print('<widgets><func: parameters_portHandler()>:Inside Parameters\'s interactive method')
         
         if self.btn_connect.cget("text") == 'Connect':
-            comport = self.monthchoosen_port.get()
-            baudrate = self.monthchoosen_baud.get()
+            comport = str(self.monthchoosen_port.get())
+            baudrate = str(self.monthchoosen_baud.get())
             print(f'<widgets><func: parameters_portHandler()>:port: {comport} , baudrate: {baudrate}')
             print(f'<widgets><func: parameters_portHandler()>:port: {type(comport)} , baudrate: {type(baudrate)}')
             serialPort.Open(comport,baudrate)
@@ -138,8 +140,18 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
         #TODO: Auto adjust when the number of line be bigger than the default height
         #implement tkscrolledtext.ScrolledText
 
-    def sent_printMessage(self,message:'str') -> None:
-        self.textSent.insert(tk.END,message)
+    def SendDataCommand(self):
+        message = self.ent_commands1.get() #Esto es de prueba
+
+        # message = 'Hola'
+        if serialPort.IsOpen():
+            message += '\r\n'
+            serialPort.Send(message)
+            self.textSent.insert(tk.END,message)
+        else:
+            self.textSent.insert('1.0', "Not sent - COM port is closed\r\n")
+    # def received_printMessage(self,message:'str') -> None:
+    #     self.textReceived.insert(tk.END,message)
 
     def mainMenu(self):
         #Commands
@@ -197,16 +209,5 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
     # serial data callback function
     def OnReceiveSerialData(self,message):
         str_message = message.decode("utf-8")
-        self.textReceived.insert('1.0', str_message)
+        self.textReceived.insert(tk.END, str_message)
 
-    def SendDataCommand(self):
-        # message = self.ent_commands1.get() #Esto es de prueba
-        message = 'Hola'
-        if serialPort.IsOpen():
-            message += '\r\n'
-            serialPort.Send(message)
-            self.ent_commands1.insert('1.0',message)
-        else:
-            self.ent_commands1.insert('1.0', "Not sent - COM port is closed\r\n")
-    # def received_printMessage(self,message:'str') -> None:
-    #     self.textReceived.insert(tk.END,message)
