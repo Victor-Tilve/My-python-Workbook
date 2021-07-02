@@ -39,6 +39,11 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
         #### Widgest for Sent #####
         self.sent()
 
+        #### Widgest for MainMenu #####
+        self.mainMenu()
+
+        #### Widgest for Receive #####
+        self.received()
         
 
         # self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect", command=self.portHandler(sentText))
@@ -90,16 +95,16 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
         #TODO: Label have to change when connect is already clicked
 
         #Configuring the port
-        self.parameters_set_SerialPort()
+        self.parameters_SerialPort()
 
         # self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect", command=self.portHandler(sentText))
         self.btn_connect = ttk.Button(self.labelframe_parameters, text="Connect")
         self.btn_connect.grid(column=0, row=2,columnspan=2, padx=4, pady=4)
 
 
-        self.btn_connect.bind('<Button-1>',self.parameters_set_portHandler) #TODO: how to use this without run it straightway
+        self.btn_connect.bind('<Button-1>',self.parameters_portHandler) #TODO: how to use this without run it straightway
 
-    def parameters_set_SerialPort(self) -> None:
+    def parameters_SerialPort(self) -> None:
         self.ser        = serial.Serial(
                 port='COM11',
                 baudrate=9600,
@@ -112,7 +117,7 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
         #TODO: handle the raises
         #TODO:Implement loop or thread
 
-    def parameters_set_portHandler(self) -> None:
+    def parameters_portHandler(self) -> None:
                 print('Inside Parameters\'s interactive method')
                 if self.ser.isOpen():
                         self.ser.close()
@@ -131,3 +136,55 @@ class Widgets(tk.Frame): #TODO: add the parameter of the frame
         
     def sent_printMessage(self,message:'str') -> None:
         self.text.insert(tk.END,message)
+
+    def mainMenu(self):
+            #Commands
+            self.label_commands=ttk.Label(self.labelframe_mainMenu, text=" Commands:")  
+            self.label_commands.grid(column=0, row=0, padx=4, pady=4,sticky="nsw")
+            # label_commands.pack(side=tk.LEFT)
+
+            self.ent_commands1 = tk.Entry(self.labelframe_commands,width=7)
+            self.ent_commands1.pack(side=tk.LEFT)
+            # ent_commands1.grid(column=1, row=0, padx=4, pady=4,sticky="nw")
+            self.ent_commands2 = tk.Entry(self.labelframe_commands,width=7)
+            self.ent_commands2.pack(side=tk.LEFT)
+            # ent_commands2.grid(column=2, row=0, padx=4, pady=4,sticky="nw")
+            self.ent_commands3 = tk.Entry(self.labelframe_commands,width=7)
+            self.ent_commands3.pack(side=tk.LEFT)
+
+            #Period
+            self.label_period=ttk.Label(self.labelframe_mainMenu, text=" Period:")  
+            self.label_period.grid(column=0, row=1, padx=4, pady=4,sticky="nw")
+            #combobox creation Perior
+            self.n_period = tk.StringVar()
+            self.monthchoosen_period       = ttk.Combobox(self.labelframe_mainMenu, width = 20, textvariable = self.n_period)
+            self.monthchoosen_period['values'] = (' 5 seg', 
+                                    ' 10 seg',
+                                    ' 15 seg',
+                                    ' 30 seg',
+                                    ' 45 seg',
+                                    ' 60 seg')
+            self.monthchoosen_period.grid(column = 1, row = 1)
+
+            #Times
+            self.label_times=ttk.Label(self.labelframe_mainMenu, text=" Times:")  
+            self.label_times.grid(column=0, row=2, padx=4, pady=4,sticky="nw")
+            #combobox creation Times
+            self.n_times = tk.StringVar()
+            self.monthchoosen_times       = ttk.Combobox(self.labelframe_mainMenu, width = 20, textvariable = self.n_times)
+            self.monthchoosen_times['values'] = (' 1', 
+                                    ' 2',
+                                    ' 3',
+                                    ' 5',
+                                    ' 10',
+                                    ' 15')
+            self.monthchoosen_times.grid(column = 1, row = 2)
+
+            #Start Button
+            # self.btn_start = ttk.Button(self.labelframe_mainMenu, text="Start", command=self.interactive(sentText))
+            self.btn_start = ttk.Button(self.labelframe_mainMenu, text="Start")
+            self.btn_start.grid(column=0, row=3,columnspan=2, padx=4, pady=4)
+
+    def received(self):
+        self.textReceived = tk.Text(self.labelframe_received,height=10,width=50)
+        self.textReceived.grid(column=0, row=0, padx=4, pady=4, sticky="nw")
