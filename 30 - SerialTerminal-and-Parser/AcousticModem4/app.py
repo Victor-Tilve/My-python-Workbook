@@ -18,7 +18,7 @@ class App(tk.Frame):
 
         self.window.title('Acustic Modem')
         #Change the Icon
-        ico = Image.open("D:\\xx - Github\\My-python-Workbook\\30 - SerialTerminal-and-Parser\\pics\\router.png")
+        ico = Image.open("../pics/router.png")
         photo = ImageTk.PhotoImage(ico)
         self.window.wm_iconphoto(False, photo)
 

@@ -8,29 +8,39 @@ I'll define as much as functions as commands to decode
 
 
 #+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:122>at#CR#LFOK#CR#LFuser:123>atl#CR#LF#CR#LFuser:124>Lowpower#CR#LF+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:124>at#CR#LFOK#CR#LFuser:125>atl#CR#LF#CR#LFuser:126>Lowpower#CR#LF+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:126>at#CR#LFOK#CR#LFuser:127>atl#CR#LF#CR#LFuser:128>Lowpower#CR#LF+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:128>at#CR#LFOK#CR#LFuser:129>atl#CR#LF#CR#LFuser:130>Lowpower#CR#LF
-def checkLocalConnection(src_str):
-    #Message expectec:  CONNECT 00800 bits/sec#CR#LF
-    sub_index   = src_str.find('CONNECT')
-    baud        = src_str[sub_index + 8:sub_index + 13]
-    status      = src_str[sub_index:sub_index + 7]
-    if status == 'CONNECT':
+def checkCommandMode(src_str):
+    #+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:147>
+    sub_index   = src_str.find('>')
+    if sub_index != -1:
         return True
     else:
-        print('<ATD5>: No se estabeció comunicacion con modem remoto')
+        print('<checkCommandMode>: No se estabeció comunicacion con modem remoto')
+
+def commandMode():
+    serial.print('+++\r\n')
+    src_str = serial.read()
+    return src_str
+
 
 #TODO: Debo importar el objeto externo "serial" para poder leer y enviar comandos desde acá
 def sentCommand(command):
-    serial.print('+++\r\n')
-    src_str = serial.read()
-    status = checkLocalConnection(src_str) 
+    src_str = commandMode()
+    status = checkCommandMode(src_str) 
     # time.sleep(100) #Calibrate the time
     if status:
-        serial.print('command\r\n')
+        serial.print(command + '\r\n')
     else:
         print('<sentCommand>: No se estabeció comunicacion con modem Local') #TODO: what would the program response if this happens?
 #close communication with local modem - Local modem in low power
+
+# +++#CR#LFCommand '+++' not found#CR#LFError#CR#LF
+# +++#CR#LFuser:145>
+# +++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:147>
+
 def closeCommunication():
     serial.print('ATL\r\n') #COMEBACK: adsgsdgsdfgsdhd
+    status = checkCommandMode(src_str) 
+
     
 
 
