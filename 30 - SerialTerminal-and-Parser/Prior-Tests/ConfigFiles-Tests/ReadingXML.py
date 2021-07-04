@@ -10,14 +10,14 @@ mydoc = minidom.parse('config.xml')
 items = mydoc.getElementsByTagName('item')
 pruebas = mydoc.getElementsByTagName('prueb')
 
-# all item attributes
+""" # all item attributes
 print('\nAll attributes:')
 for elem in items:
     print(elem.firstChild.data)
+ """
 
 
-
-"""#Type
+#Type
 print("Items' Type:" + str(type(items)))
 
 # one specific item attribute
@@ -37,4 +37,4 @@ print(items[1].childNodes[0].data)
 # all items data
 print('\nAll item data:')
 for elem in items:
-    print(elem.firstChild.data)"""
+    print(elem.firstChild.data)

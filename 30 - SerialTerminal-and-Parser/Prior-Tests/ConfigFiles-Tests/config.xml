@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <data>
     <modem_9600>
         <item name="Port">COM11</item>
@@ -9,4 +10,14 @@
         <item name="xonxoff">0</item>
         <item name="rtscts">0</item>
     </modem_9600>
+    <modem_115200>
+        <prueb name="Port">COM12</prueb>
+        <prueb name="baudrate">115200</prueb>
+        <prueb name="bitesize">8</prueb>
+        <prueb name="parity">N</prueb>
+        <prueb name="stopbits">1</prueb>
+        <prueb name="timeout">None</prueb>
+        <prueb name="xonxoff">0</prueb>
+        <prueb name="rtscts">0</prueb>
+    </modem_115200>
 </data>
