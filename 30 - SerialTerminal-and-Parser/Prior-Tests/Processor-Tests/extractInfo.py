@@ -1,5 +1,5 @@
 import time
-
+import serial
 '''
 I'll define as much as functions as commands to decode
 '''
@@ -90,7 +90,7 @@ def ATX(src_str):
     print(f'el valor de CCERR es: {CCERR}')
 
 def AT(cmd_answer:'str'):
-    # user:10>AT#CR#LF#CR#LFOK#CR#L
+    user:10>AT#CR#LF#CR#LFOK#CR#L
 
 
 
@@ -104,4 +104,4 @@ def AT(cmd_answer:'str'):
 
 if __name__ == "__main__":
     src_str     = '00800 bits/sec\nMOD:05 ERR:000 SNR:27.1 AGC:07 SPD:+00.0 CCERR:014'    
-    ver_1(src_str)
+    # ver_1(src_str)
