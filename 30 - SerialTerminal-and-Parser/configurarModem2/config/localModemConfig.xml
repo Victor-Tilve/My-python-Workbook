@@ -31,8 +31,8 @@
         <item name="OpMode">1</item>                <!--Modem operating mode. -->
         <item name="DevEnable">0</item>             <!--Device enable performance. -->
         <item name="FwdDelay">3.0</item>            <!--Modem forwarding delay. -->
-        <item name="LocalAddr">0</item>             <!--Local modem address. -->
-        <item name="RemoteAddr">0</item>            <!--Online remote modem address. -->
+        <item name="LocalAddr">4</item>             <!--Local modem address. -->
+        <item name="RemoteAddr">5</item>            <!--Online remote modem address. -->
         <item name="ShowBadData">Ena</item>         <!--Display packet errors enable/disable. -->
         <item name="StartTones">Ena</item>          <!--Play start tones enable/disable. -->
         <item name="TxRate">5</item>                <!--Transmitting acoustic bit rate. -->

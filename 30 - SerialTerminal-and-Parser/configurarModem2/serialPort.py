@@ -6,10 +6,10 @@ class SerialPort:
     def __init__(self):
         self.comportName = ""
         self.baud = 0
-        self.timeout = 5
+        self.timeout = 0
         self.ReceiveCallback = None
         self.isopen = False
-        self.receivedMessage = None
+        self.receivedBit = None
         self.serialport = serial.Serial()
 
     def __del__(self):
@@ -22,24 +22,24 @@ class SerialPort:
     def RegisterReceiveCallback(self,aReceiveCallback):
         self.ReceiveCallback = aReceiveCallback
         try:
-            _thread.start_new_thread(self.SerialReadlineThread, ())
-            print('<SerialPorti><RegisterReceiveCallback>: thread started')
+            _thread.start_new_thread(self.readLine, ())
+            # print('<SerialPorti><RegisterReceiveCallback>: thread started')
         except:
             print("<SerialPorti><RegisterReceiveCallback>: Error starting Read thread: ", sys.exc_info()[0])
 
-    def SerialReadlineThread(self):
+    def readLine(self):
         while True:
             try:
                 if self.isopen:
-                    print(f'<SerialPorti><SerialReadlineThread>: Inside conditional')
-                    # self.receivedMessage = self.serialport.readline()
-                    self.receivedMessage = self.serialport.readline()
-                    if self.receivedMessage != "":
-                        print(f'<SerialPorti><SerialReadlineThread>: {self.receivedMessage.decode("utf-8")}')
-                        self.ReceiveCallback(self.receivedMessage)
+                    # print(f'<SerialPorti><readLine>: Inside conditional')
+                    # self.receivedBit = self.serialport.readline()
+                    self.receivedBit = self.serialport.read()
+                    if self.receivedBit != "":
+                        # print(f'<SerialPorti><readLine>: {self.receivedBit.decode("utf-8")}')
+                        self.ReceiveCallback(self.receivedBit)
 
             except:
-                print("<SerialPorti><SerialReadlineThread>: Error reading COM port: ", sys.exc_info()[0])
+                print("<SerialPorti><readLine>: Error reading COM port: ", sys.exc_info()[0])
                 sys.exit(1)
 
 

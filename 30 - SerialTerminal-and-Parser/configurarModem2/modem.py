@@ -1,11 +1,26 @@
 '''
 this configuration apply for the local and the remote modem. I have to make sure of that
 '''
-from __future__ import print_function
+
 from serialPort import SerialPort
 import xml.dom.minidom
 import time
 import sys
+
+txRate = {
+    2:"140",
+    3:"300",
+    4:"600",
+    5:"800",
+    6:"1066",
+    7:"1200",
+    8:"2400",
+    9:"2560",
+    10:"5120",
+    11:"7680",
+    12:"10240",
+    13:"15360"
+}
 
 import serial
 
@@ -17,6 +32,7 @@ class Modem:
         self.serial2    = {}
         self.system     = {}
         self.modem      = {}
+
         self.release    = {}
         self.transport  = {}
         self.test       = {}
@@ -24,6 +40,10 @@ class Modem:
         self.nav        = {}
 
         self.textReceived = []
+
+        #This flag if for Controling the loop
+        self.flag = False
+
         teledyne = xml.dom.minidom.parse('C:\\Users\\vtilve\\Desktop\\VictorTilve\\GitHub\\My-python-Workbook\\30 - SerialTerminal-and-Parser\\configurarModem2\\config\\localModemConfig.xml') #TODO: change the path, not make it hard coded
         # teledyne = xml.dom.minidom.parse('D:\\xx - Github\\My-python-Workbook\\32 - Configurar modems\\config\\localModemConfig.xml') #TODO: change the path, not make it hard coded
         
@@ -32,51 +52,66 @@ class Modem:
         serialPort.Open(port,baud)
         serialPort.RegisterReceiveCallback(self.OnReceiveSerialData)
         # time.sleep(1)
-        if self.commandMode():
-            print('<modem><__init__>:exit command mode')
-            # for key in self.serial1:
-            #     self.sendCommand('@' + key + '=' + self.serial1[key])
-            #     time.sleep(1)
-        # if self.closeCommandLow():
+        # if self.commandMode():
+        #     # print('<modem><__init__>:exit command mode')
+        #     for key in self.modem:
+        #         self.sendCommand('@' + key + '=' + self.modem[key])
+        #         time.sleep(1)
+        #         if self.CheckClamCommand(key):
+        #             print('@' + key + '=' + self.modem[key] + '\t\t\tDONE')
+        #         # elif self.commandModeCheck():
 
+        for key in self.serial1:
+            self.sendCommand('@' + key + '=' + self.serial1[key])
+            time.sleep(1)
+            if self.CheckClamCommand(key): #TODO: Eliminar los parametros almacenados en el buffer self.textReceived con pop(0:tamaño buffer)
+                print('@' + key + '=' + self.serial1[key] + '\t\t\tDONE')
+            else:
+                print('@' + key + '=' + self.serial1[key] + '\t\t\tERROR')
         
     ############# Send command functions #############
 
-    # +++#CR#LFCommand '+++' not found#CR#LFError#CR#LF
+    # +++#CR#LFCommand '+++' not found#CR#LFError#CR#LFuser:12>
     # +++#CR#LFuser:145>
     # +++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:147>
-    def commandMode(self):
-        
+    def commandMode(self) -> bool:
         serialPort.Send('+++\r\n') 
-        time.sleep(5)
-        # src_str = serialPort.receivedMessage #COMEBACK: This work because i use <CR><LF> after >, but it doesn't happent in the REALITY
-        for message in self.textReceived: 
-            src_str = message
-            # src_str = src_str.decode("utf-8")
-            if src_str != "":
-                print(f'<modem><commandMode> src_str:{src_str}')
-        self.textReceived.clear
-        # print(f'<modem><commandMode> src_str:{type(src_str)}')
-        # try:
-        #     sub_index   = src_str.find('>')
-        #     if sub_index != -1:
-        #         print('<modem><commandMode>:Listo para configurar')
-        #         return True
-        #     else:
-        #         sub_index   = src_str.find('Command')
-                
-        #         if sub_index != -1:
-        #             print('<modem><commandMode>: Command mode activo')
-        #             return True
-        #         else:
-        #             print('<modem><commandMode>: No se estabeció comunicacion con modem')
-        #             return False
-        # except AttributeError as error: 
-        #     print(f'<modem><commandMode>: {error}')
-        #     sys.exit(1)
+        time.sleep(1)
+        if self.flag:
+            return self.commandModeCheck()
 
-    def CheckClamCommand(self):
-        pass
+    def commandModeCheck(self)->bool:
+        found_flag = False
+        # print(f'<modem><commandModeCheck>: Inside function')
+        while len(self.textReceived) != 0:
+            if self.textReceived.pop() == '>':
+                print(f'<modem><commandModeCheck>: Modo comando activo')
+                self.textReceived.clear()
+                found_flag = True
+                return True
+        if len(self.textReceived) == 0 and not found_flag:
+            print(f'<modem><commandModeCheck>: No se estableció conexión')
+            return False
+
+    def CheckClamCommand(self,command):
+        ''' Esta funcion verifica si el modem respondio con el conmando configurado, es decir,
+            que la configuración se realizó
+        '''
+        str_buffer =""
+        # print(f'<modem><CheckClamCommand> Before: {self.textReceived}')
+        for chr in self.textReceived:
+            str_buffer+=chr
+        # print(f'<modem><CheckClamCommand> After: {self.textReceived}')
+        # print(f'<modem><CheckClamCommand>: {str_buffer}')
+        if str_buffer.find(command) != -1:
+            if str_buffer.find('Bad') == -1:
+                return True
+            else:
+                return False    
+        else:
+            return False    
+
+
 
     #+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:122>at#CR#LFOK#CR#LFuser:123>atl#CR#LF#CR#LFuser:124>Lowpower#CR#LF+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:124>at#CR#LFOK#CR#LFuser:125>atl#CR#LF#CR#LFuser:126>Lowpower#CR#LF+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:126>at#CR#LFOK#CR#LFuser:127>atl#CR#LF#CR#LFuser:128>Lowpower#CR#LF+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:128>at#CR#LFOK#CR#LFuser:129>atl#CR#LF#CR#LFuser:130>Lowpower#CR#LF
     #+++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:147>
@@ -152,7 +187,7 @@ class Modem:
             for elem in items:
                 self.serial2[elem.attributes['name'].value] = elem.firstChild.data
         else:
-            print('<ReadingXML3><handleSerial> el tipo seleccionado no es valido')
+            print('<modem><handleSerial> el tipo seleccionado no es valido')
 
     def handleSystem(self,system):
         items = system[0].getElementsByTagName("item")
@@ -227,7 +262,13 @@ class Modem:
 
     def OnReceiveSerialData(self,message):
         self.textReceived.append(message.decode("utf-8"))
+        # print(f'<modem><OnReceiveSerialData>: {self.textReceived}')
+        if self.textReceived != "":
+            self.flag = True
         
+
+                
+
 
 
 
