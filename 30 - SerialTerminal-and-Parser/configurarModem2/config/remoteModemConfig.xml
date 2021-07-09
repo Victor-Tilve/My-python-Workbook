@@ -36,7 +36,7 @@
         <item name="ShowBadData">Ena</item>         <!--Display packet errors enable/disable. -->
         <item name="StartTones">Ena</item>          <!--Play start tones enable/disable. -->
         <item name="TxRate">5</item>                <!--Transmitting acoustic bit rate. -->
-        <item name="TxPower">8</item>               <!--Transmit power level. -->
+        <item name="TxPower">1</item>               <!--Transmit power level. -->
         <item name="WakeTones">Ena</item>           <!--Wakeup signal enable/disable. -->
         <item name="PrintHex">Dis</item>            <!--Display data in hex enable/disable. -->
         <item name="StrictAT">Dis</item>            <!--AT commands enable/disable -->

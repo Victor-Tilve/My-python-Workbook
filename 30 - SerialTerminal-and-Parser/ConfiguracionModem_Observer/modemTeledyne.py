@@ -1,32 +1,16 @@
-'''
-this configuration apply for the local and the remote modem. I have to make sure of that
-'''
+from abstractModem import AbstractModem
+from abstractSerial import AbstractSerial
 
 from serialPort import SerialPort
 import xml.dom.minidom
 import time
 import sys
 
-txRate = {
-    2:"140",
-    3:"300",
-    4:"600",
-    5:"800",
-    6:"1066",
-    7:"1200",
-    8:"2400",
-    9:"2560",
-    10:"5120",
-    11:"7680",
-    12:"10240",
-    13:"15360"
-}
-
-import serial
-
 serialPort = SerialPort()
 
-class Modem:
+
+class ModemTeledyne(AbstractModem):
+
     def __init__(self,port,baud) -> None:
         self.serial1    = {}
         self.serial2    = {}
@@ -165,7 +149,7 @@ class Modem:
             sys.exit(1)
 
 
-############################# XML config ###############################################
+############################# XML extract config ###############################################
     
     def handleteledyne(self,teledyne):
         # handleteledyneTitle(teledyne.getElementsByTagName("title")[0])
@@ -269,7 +253,7 @@ class Modem:
         print(f'el valor de CCERR es: ')
 
 
-###############################################
+################### TetReceived ########################
 
     def OnReceiveSerialData(self,message):
         '''Almacena toda la información que proviene desde la puerta serial'''
@@ -277,13 +261,9 @@ class Modem:
         # print(f'<modem><OnReceiveSerialData>: {self.textReceived}')
         if self.textReceived != "":
             self.flag = True
-        
 
-                
+################### Observe patter methods ########################
 
-
-
-
-
-# if __name__ == "__main__":
-    
+    def update(self, abstractSerial: AbstractSerial) -> None:
+        if abstractSerial._state < 3:
+            print("ModemTeledyne: Reacted to the event")
