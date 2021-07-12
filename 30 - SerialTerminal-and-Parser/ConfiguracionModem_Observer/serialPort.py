@@ -18,12 +18,12 @@ class SerialPort(AbstractSerial):
         self.serialport = serial.Serial()
         
         # The Subject owns some important state and notifies modems when the state changes.
-        _state: int = None
+        self._state: int = None
 
         #For the sake of simplicity, the Subject's state, essential to all subscribers, is stored in this variable.
-        _modem: List[AbstractModem] = []
+        self._modem: List[AbstractModem] = []
 
-    
+######################  Serial port methods  ########################    
     def RegisterReceiveCallback(self,aReceiveCallback):
         self.ReceiveCallback = aReceiveCallback
         try:

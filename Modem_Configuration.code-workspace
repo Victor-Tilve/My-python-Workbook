@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "30 - SerialTerminal-and-Parser"
+		},
+		{
+			"path": "34 - Modem Configuration"
+		},
+		{
+			"path": "33 - Observer Pattern"
+		},
+		{
+			"path": "35 - Abstract Factory"
+		},
+		{
+			"path": "36 - Factory Method"
+		},
+		{
+			"path": "37 - Threading"
+		}
+	],
+	"settings": {}
+}

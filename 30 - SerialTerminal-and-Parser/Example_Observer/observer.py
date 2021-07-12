@@ -1,6 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod #https://docs.python.org/3/library/abc.html
-from subject import Subject
+# from subject import Subject
 
 class Observer(ABC):
     """

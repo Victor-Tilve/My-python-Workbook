@@ -6,7 +6,7 @@ import xml.dom.minidom
 import time
 import sys
 
-serialPort = SerialPort()
+# serialPort = SerialPort()
 
 
 class ModemTeledyne(AbstractModem):
@@ -39,7 +39,7 @@ class ModemTeledyne(AbstractModem):
         serialPort.Open(port,baud)
         
         # Starting the thread
-        serialPort.RegisterReceiveCallback(self.OnReceiveSerialData)
+        # serialPort.RegisterReceiveCallback(self.OnReceiveSerialData)
         # time.sleep(1)
         # if self.commandMode():
         #     # print('<modem><__init__>:exit command mode')
@@ -269,12 +269,7 @@ class ModemTeledyne(AbstractModem):
 
 ################### TextReceived ########################
 
-    def OnReceiveSerialData(self,message):
-        '''Almacena toda la información que proviene desde la puerta serial'''
-        self.textReceived.append(message.decode("utf-8")) #TODO: debo limpiar el buffer previo a enviar un nuevo comando
-        # print(f'<modem><OnReceiveSerialData>: {self.textReceived}')
-        if self.textReceived != "":
-            self.flag = True
+
 
 ################### Observe patter methods ########################
 

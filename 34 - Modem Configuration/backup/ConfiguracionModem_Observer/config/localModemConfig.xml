@@ -1,0 +1,89 @@
+<remote>
+    <serial1>
+        <item name="P1Baud">9600</item>             <!--Serial port 1 baud rate. -->
+        <item name="P1EchoChar">Dis</item>          <!--Serial port 1 echo enable/disable. -->
+        <item name="P1FlowCtl">0</item>             <!--Serial port 1 flow control. -->
+        <item name="P1Protocol">0</item>            <!--Serial port 1 protocol. -->
+        <item name="P1StripB7">Dis</item>           <!--Serial port 1 strip bit 7. -->
+    </serial1>
+
+    <serial2>
+        <item name="P2Baud">9600</item>             <!--Serial port 2 baud rate. -->
+        <item name="P2EchoChar">Dis</item>          <!--Serial port 2 echo enable/disable. -->
+        <item name="P2FlowCtl">0</item>             <!--Serial port 2 flow control. -->
+        <item name="P2Protocol">0</item>            <!--Serial port 2 protocol. -->
+        <item name="P2StripB7">Dis</item>           <!--Serial port 2 strip bit 7. -->
+    </serial2>
+
+    <system>
+        <item name="SyncPPS">2</item>               <!--1 PPS clock source. -->
+        <item name="IdleTimer">00:03:00</item>      <!--Low power idle timer. -->
+        <item name="Verbose">1</item>               <!--Display verbosity. -->
+        <item name="Prompt">7</item>                <!--Prompt Prompt setting. -->
+        <item name="CMWakeHib">9</item>             <!--Compact modem wakeup period. -->
+        <item name="CMFastWake">Ena</item>          <!--Fast compact modem wakeup scheme enable/disable. -->
+        <item name="MinOpVolt">9.6</item>           <!--The voltage below which the modem brown out function will activate. -->
+    </system>
+
+    <modem>
+        <item name="DataRetry">0</item>             <!--Number of times a data packet is retransmitted. -->
+        <item name="AcRspTmOut">7.5</item>          <!--Modem acoustic response timeout. -->
+        <item name="OpMode">1</item>                <!--Modem operating mode. -->
+        <item name="DevEnable">0</item>             <!--Device enable performance. -->
+        <item name="FwdDelay">3.0</item>            <!--Modem forwarding delay. -->
+        <item name="LocalAddr">4</item>             <!--Local modem address. -->
+        <item name="RemoteAddr">5</item>            <!--Online remote modem address. -->
+        <item name="ShowBadData">Ena</item>         <!--Display packet errors enable/disable. -->
+        <item name="StartTones">Ena</item>          <!--Play start tones enable/disable. -->
+        <item name="TxRate">5</item>                <!--Transmitting acoustic bit rate. -->
+        <item name="TxPower">8</item>               <!--Transmit power level. -->
+        <item name="WakeTones">Ena</item>           <!--Wakeup signal enable/disable. -->
+        <item name="PrintHex">Dis</item>            <!--Display data in hex enable/disable. -->
+        <item name="StrictAT">Dis</item>            <!--AT commands enable/disable -->
+        <item name="InputMode">1</item>             <!--Single/Dual serial port selection. -->
+        <item name="SmartRetry">Dis</item>          <!--Retransmit at successively slower acoustic bit rates. -->
+    </modem>
+
+    <release>
+        <item name="TimedRelease">0</item>          <!--Elapsed time to release activation. -->
+    </release>
+
+    <transport>
+        <item name="TPortMode">0</item>             <!--Routing of data input on serial port 1 and serial port 2. -->
+        <item name="SrcP1">1</item>                 <!--Transport address that will be attached to transmitted data that are input to serial port 1. -->
+        <item name="SrcP2">2</item>                 <!--Transport address that will be attached to transmitted data that are input to serial port 2. -->
+        <item name="Dst1">1</item>                  <!--Serial port on which data received over the acoustic link with transport address 1 will be output. -->
+        <item name="Dst2">2</item>                  <!--Serial port on which data received over the acoustic link with transport address 2 will be output. -->
+    </transport>
+
+    <test>
+        <item name="SimAcDly">0</item>              <!--Simulated acoustic delay. -->
+        <item name="PktEcho">0</item>               <!--Test message display enable/disable. -->
+        <item name="PktSize">0</item>               <!--Test message size. -->
+        <item name="RcvAll">Dis</item>              <!--Receive all data enable/disable. -->
+    </test>
+
+    <xpnd>
+        <item name="RxFreq">11000</item>            <!--Modem receive frequency. -->
+        <item name="RxThresh">10</item>             <!--Detected signal standard deviation. -->
+        <item name="RxToneDur">10</item>            <!--Modem receive pulse width. -->
+        <item name="RxLockout">75</item>            <!--Modem lockout time. -->
+        <item name="TxToneDur">10</item>            <!--Modem transmit pulse width. -->
+        <item name="TAT">0</item>                   <!--Transponder turn-around-time. -->
+        <item name="LBLmode">Off</item>             <!--Modem transponder enable. -->
+    </xpnd>
+
+    <nav>
+        <item name="Latitude">41.638246</item>      <!--Latitude of modem location. -->
+        <item name="Longitude">-70.6090376</item>   <!--Longitude of modem location. -->
+        <item name="GPSAlt">0</item>               <!--Altitude of modem with respect to sea level. -->
+        <item name="Altitude">0</item>               <!--Altitude of modem above the sea floor. -->
+        <item name="Depth">0</item>               <!--Depth of modem. -->
+        <item name="Compass">0</item>               <!--Heading of modem mounting platform. -->
+        <item name="Pitch">0</item>               <!--Pitch of modem mounting platform. -->
+        <item name="Roll">0</item>               <!--Roll of modem mounting platform. -->
+        <item name="SpeedOfSound">1500</item>               <!--Speed of sound in water. -->
+        <item name="ReplyData">1</item>               <!--Enables display of location and depth or altitude of remote modem. 1 - Latlong-->
+    </nav>
+
+</remote>
