@@ -11,6 +11,8 @@ import serial
 import sys
 # import _thread
 
+
+
 ################################## Serial ###############################################
 
 class AbstractSerial(ABC):
@@ -206,6 +208,10 @@ class Processor(AbstractProcessor):
         self._state: bool = False
         self.buffer: str = ""
         # serialPort.RegisterReceiveCallback(self.OnReceiveSerialData) #COMEBACK: Do i need this
+        
+        #TODO: Use this in the modem program for sending commands
+        self.at_command : bool = False      #Help me to know when i have to check a Clam or at command
+        self.clam_command : bool = False    #Help me to know when i have to check a Clam or at command
 
     def preprocess_buffer(self):
         pass
@@ -219,12 +225,34 @@ class Processor(AbstractProcessor):
     def clam_commnad(self):
         pass
 
-    def at_command(self):
-        pass
+    def check_at_command(self,command)-> bool:
+        
+        if self.buffer.find(command) != -1:
+            if self.buffer.find('Bad') == -1: #COMEBACK: look for the at answer and develope the proper method
+                return self.commandModeCheck()
+            else:
+                return False    
+        else:
+            return False  
 
-    def check_command_prompt(self):
-        pass
+    def check_command_prompt(self)-> bool:
+        if self.buffer.find('>') != -1:
+            print(f'<modem><commandModeCheck>: Modo comando activo')    
+            return True
+        else:
+            return False    
+
     
+    def check_command_CLAM(self,command)-> bool: #TODO: how the program knows when                                                                               
+    
+        if self.buffer.find(command) != -1:
+            if self.buffer.find('Bad') == -1:
+                return self.commandModeCheck()
+            else:
+                return False    
+        else:
+            return False    
+
     #
     def OnReceiveSerialData(self,message):
         # '''Almacena toda la información que proviene desde la puerta serial'''
@@ -244,48 +272,33 @@ class Processor(AbstractProcessor):
             # print(str(threading.current_thread()))
             print(f"Processor: Reacted to the event\n {self.buffer}")
             abstractSerial.data_status()
+
             self.buffer = ""
             abstractSerial.receivedData.clear()
 
+    ###################### Decoded received messages #############################
+    #TODO: do this for every AT command
+    def ATX(src_str):
+        sub_index   = src_str.find('MOD:')
+        MOD         = src_str[sub_index + 4:sub_index + 6]
+        sub_index   = src_str.find('ERR:')
+        ERR         = src_str[sub_index + 4:sub_index + 7]
+        sub_index   = src_str.find('SNR:')
+        SNR         = src_str[sub_index + 4:sub_index + 8]
+        sub_index   = src_str.find('AGC:')
+        AGC         = src_str[sub_index + 4:sub_index + 6]
+        sub_index   = src_str.find('SPD:')
+        SPD         = src_str[sub_index + 4:sub_index + 9]
+        sub_index   = src_str.find('CCERR:')
+        CCERR       = src_str[sub_index + 6:sub_index + 9]
+
+        print(f'el valor de MOD es: {MOD}')
+        print(f'el valor de ERR es: {ERR}')
+        print(f'el valor de SNR es: {SNR}')
+        print(f'el valor de AGC es: {AGC}')
+        print(f'el valor de SPD es: {SPD}')
+        print(f'el valor de CCERR es: {CCERR}')
 
 
-# if __name__ == "__main__":
-    # The client code.
+###################### Modem class #############################
 
-    """ AbstractSerial = SerialPort()
-
-    AbstractProcessor_a = Processor()
-    AbstractSerial.attach(AbstractProcessor_a)
-
-    AbstractProcessor_b = ConcrereProcessorB()
-    AbstractSerial.attach(AbstractProcessor_b)
-
-    AbstractSerial.some_business_logic()
-    AbstractSerial.some_business_logic()
-
-    AbstractSerial.detach(AbstractProcessor_a)
-
-    AbstractSerial.some_business_logic() """
-
-
-    '''
-    Output.txt: Execution result
-    AbstractSerial: Attached an AbstractProcessor.
-    AbstractSerial: Attached an AbstractProcessor.
-
-    AbstractSerial: I'm doing something important.
-    AbstractSerial: My state has just changed to: 0
-    AbstractSerial: Notifying AbstractProcessors...
-    Processor: Reacted to the event
-    ConcrereProcessorB: Reacted to the event
-
-    AbstractSerial: I'm doing something important.
-    AbstractSerial: My state has just changed to: 5
-    AbstractSerial: Notifying AbstractProcessors...
-    ConcrereProcessorB: Reacted to the event
-
-    AbstractSerial: I'm doing something important.
-    AbstractSerial: My state has just changed to: 0
-    AbBtractSerial: Notifying AbstractProcessors...
-    Processor: Reacted to the event
-    '''
