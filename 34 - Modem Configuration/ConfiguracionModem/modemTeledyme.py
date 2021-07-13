@@ -208,7 +208,17 @@ class ModemTeledyne():
         #     print(f'<modem><closeCommandOnline>: {error}')
         #     sys.exit(1)
         pass
-
+    def commandMode(self,serialPort: SerialPort) -> bool: #TODO: 
+        '''
+        Messages examples
+        +++#CR#LFCommand '+++' not found#CR#LFError#CR#LFuser:12>
+        +++#CR#LFuser:145>
+        +++CONNECT 00800 bits/sec#CR#LF#CR#LFuser:147>    
+        '''
+        serialPort.Send('+++\r\n') 
+        time.sleep(1)
+        if self.flag:
+            return self.commandModeCheck()
 
 if __name__ == "__main__":
     modem_teledyne = ModemTeledyne()
