@@ -126,13 +126,13 @@ class SerialPort(AbstractSerial):
             # print(f'<SerialPorti><readLine>: Inside while (self.exitapp)')
             try:
                 if self.isopen:
-                    # print(f'<SerialPorti><readLine>: Inside conditional:')
+                    print(f'<SerialPorti><readLine>: Inside conditional:')
                     
                     if self.serialport.inWaiting() > 0:
                         self._state = True #TODO: find the point where put it False again (Observer, method already created). Delete, this work is being performance by _status
                          
                         self._state = True #COMEBACK:   what do i do with this flag? seria el mismo de data
-                        # print(f'<SerialPorti><readLine>: Hay dato en puerto')
+                        print(f'<SerialPorti><readLine>: Hay dato en puerto')
                         
                         receivedBit = self.serialport.read(self.serialport.inWaiting()) 
                         
@@ -259,6 +259,7 @@ class Processor(AbstractProcessor):
             print(f'<modem><check_command_prompt>: Modo comando activo')    
             return True
         else:
+            print(f'<modem><check_command_prompt>: No se encontro command prompt')    
             return False    
 
     
@@ -266,13 +267,8 @@ class Processor(AbstractProcessor):
         print(f'<serialProcessor><check_command_clam>:comando {self.command_clam}')
         if self.buffer.find(self.command_clam) != -1:
             print('<serialProcessor><check_command_clam>:comando encontrado')
-            # if self.buffer.find('Bad') == -1:
-            #     return self.check_command_prompt()
-            # else:
-            #     return False    
-
             return self.check_command_prompt()
-            
+            #TODO: Check the bad parameters            
         else:
             return False    
 
@@ -319,12 +315,14 @@ class Processor(AbstractProcessor):
             # print(str(threading.current_thread()))
             print(f"Processor: Reacted to the event\n {self.buffer}")
             if self.is_command_clam:
-                print('<serialProcessor><update>:dentro del condicional \"status_command_clam\"')
-                if not self.check_command_clam():
-                    print('<serialProcessor><update>:dentro del condicional \"check_command_clam\"')
+                print('<serialProcessor><update>:dentro del condicional is_command_clam')
+                if not self.check_command_clam(): #NOTE: if check_command_clam return false, dont let main loop enter in the conditional
+                    print('<serialProcessor><update>:dentro del condicional check_command_clam')
                     self.set_status_command_clam(False)
+                else: #Any other case, let the main while runs
+                    self.set_status_command_clam(True)
                 
-            elif self.status_command_at:
+            elif self.is_command_at:
                 self.command_at()
                 # self.set_status_command_at()
             

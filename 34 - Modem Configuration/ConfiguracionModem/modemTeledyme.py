@@ -1,11 +1,13 @@
+
 import time
 import sys
+from typing import Tuple
 
 #XML Manipulation
 import xml.dom.minidom
 
 from serialProcessor import SerialPort
-
+from serialProcessor import Processor
 class ModemTeledyne():
     '''
     Modem se encargará de enviar todos los comando de configuraión mientras que 
@@ -111,55 +113,62 @@ class ModemTeledyne():
         # print("\n")
 
     ############################# Configure Modem ###############################################
-    def configure_modem(self, serialPort: SerialPort): #COMEBACK: serial port object as parameter
+    def configure_modem(self, serialPort: SerialPort, procesor:Processor): #COMEBACK: serial port object as parameter
         '''
         This function gonna take all the parameter loaded from the XML and confiure the modem
         using a serial port object
         '''
         #COMEBACK: Implemente de validation from the processor. this is a test.
-        try:
-            ###################  Serial1 ######################
-            for key in self.serial1:
-                self.sendCommand(serialPort,'@' + key + '=' + self.serial1[key])
-                time.sleep(1)
-            ###################  Serial2 ######################
-            for key in self.serial2:
-                self.sendCommand(serialPort,'@' + key + '=' + self.serial2[key])
-                time.sleep(1)
-            ###################  system ######################
-            for key in self.system:
-                self.sendCommand(serialPort,'@' + key + '=' + self.system[key])
-                time.sleep(1)
-            ###################  modem ######################
-            for key in self.modem:
-                self.sendCommand(serialPort,'@' + key + '=' + self.modem[key])
-                time.sleep(1)
-            ###################  Release ######################
-            for key in self.release:
-                self.sendCommand(serialPort,'@' + key + '=' + self.release[key])
-                time.sleep(1)
+        _key = "P1Baud"
+        self.sendCommand(serialPort,'@' + _key + '=' + self.serial1[_key])
+        procesor.set_is_command_at(True) #TODO: this can be insede set_command_clam
+        procesor.set_command_clam(_key)
+        time.sleep(1)
+        # try:
+        #     ###################  Serial1 ######################
+        #     for key in self.serial1:
+        #         self.sendCommand(serialPort,'@' + key + '=' + self.serial1[key])
+        #         procesor.status_command_clam = True
+        #         procesor.command_clam(key)
+        #         time.sleep(1)
+        #    ###################  Serial2 ######################
+        #     for key in self.serial2:
+        #         self.sendCommand(serialPort,'@' + key + '=' + self.serial2[key])
+        #         time.sleep(1)
+        #     ###################  system ######################
+        #     for key in self.system:
+        #         self.sendCommand(serialPort,'@' + key + '=' + self.system[key])
+        #         time.sleep(1)
+        #     ###################  modem ######################
+        #     for key in self.modem:
+        #         self.sendCommand(serialPort,'@' + key + '=' + self.modem[key])
+        #         time.sleep(1)
+        #     ###################  Release ######################
+        #     for key in self.release:
+        #         self.sendCommand(serialPort,'@' + key + '=' + self.release[key])
+        #         time.sleep(1)
             
-            ###################  transport ######################
-            for key in self.transport:
-                self.sendCommand(serialPort,'@' + key + '=' + self.transport[key])
-                time.sleep(1)
+        #     ###################  transport ######################
+        #     for key in self.transport:
+        #         self.sendCommand(serialPort,'@' + key + '=' + self.transport[key])
+        #         time.sleep(1)
             
-            ###################  Test ######################
-            for key in self.test:
-                self.sendCommand(serialPort,'@' + key + '=' + self.test[key])
-                time.sleep(1)
+        #     ###################  Test ######################
+        #     for key in self.test:
+        #         self.sendCommand(serialPort,'@' + key + '=' + self.test[key])
+        #         time.sleep(1)
 
-            ###################  xpnd ######################
-            for key in self.xpnd:
-                self.sendCommand(serialPort,'@' + key + '=' + self.xpnd[key])
-                time.sleep(1)
+        #     ###################  xpnd ######################
+        #     for key in self.xpnd:
+        #         self.sendCommand(serialPort,'@' + key + '=' + self.xpnd[key])
+        #         time.sleep(1)
             
-            ###################  nav ######################
-            for key in self.nav:
-                self.sendCommand(serialPort,'@' + key + '=' + self.nav[key])
-                time.sleep(1)
-        except KeyError as e:
-            print("<SerialPorti><readLine>: Error reading COM port: ", sys.exc_info()[0])
+        #     ###################  nav ######################
+        #     for key in self.nav:
+        #         self.sendCommand(serialPort,'@' + key + '=' + self.nav[key])
+        #         time.sleep(1)
+        # except KeyError as e:
+        #     print("<SerialPorti><readLine>: Error reading COM port: ", sys.exc_info()[0])
         
 
     ############################# AT commands ###############################################
