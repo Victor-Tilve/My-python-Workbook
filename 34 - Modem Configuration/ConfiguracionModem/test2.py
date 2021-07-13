@@ -28,7 +28,7 @@ while True:
     try:
         if status_configuration:
             serialPort = SerialPort()
-            port = "COM11"
+            port = "COM7"
             baud = 9600
             # Opening port
             serialPort.Open(port,baud)
